@@ -1,0 +1,10 @@
+api_keys.json
+audit.jsonl
+certs/
+jevfence-client.zip
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+share/cert.pem

@@ -1,0 +1,22 @@
+# systemd USER service for the JevFence API on this machine (LAN use).
+# Install (as your normal user, not root):
+#   mkdir -p ~/.config/systemd/user && cp deploy/jevfence.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload && systemctl --user enable --now jevfence
+#   sudo loginctl enable-linger "$USER"      # keep it running after you log out / start it at boot
+# Logs:  journalctl --user -u jevfence -f
+# Secrets: TYPESAFE_API_KEY is read from .env in WorkingDirectory. Runs with --no-auth: no client keys, anyone who can
+# reach the port can use it (rate limit 600 texts/min per client IP) - restrict who can reach it with the firewall.
+[Unit]
+Description=JevFence API
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Projects/Jev-Gaurdrails
+ExecStart=%h/Projects/Jev-Gaurdrails/.venv/bin/python -m jevfence.server serve --host 0.0.0.0 --port 8443 --ssl-certfile certs/cert.pem --ssl-keyfile certs/key.pem --no-auth --rate-limit 600
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

@@ -8,3 +8,5 @@ __pycache__/
 *.pyc
 .pytest_cache/
 share/cert.pem
+share/
+examples/api_client.py
